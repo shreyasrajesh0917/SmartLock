@@ -24,5 +24,5 @@ int myFunction(int x, int y)
 
 int dummy(int x)
 {
-  return x + x;
+  return x + x + x;
 }
