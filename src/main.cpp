@@ -1,28 +1,29 @@
 #include <Arduino.h>
+#include <Keypad.h>
+#include <string>
 
-// put function declarations here:
-int myFunction(int, int);
+using namespace std;
 
-int dummy(int x);
+char matrix[4][4] = {{'1', '2', '3', 'A'}, {'4', '5', '6', 'B'}, {'7', '8', '9', 'C'}, {'*', '0', '#', 'D'}};
+byte rowPins[4] = {26, 25, 33, 32};
+byte colPins[4] = {13, 12, 14, 27};
+
+Keypad keypad = Keypad(makeKeymap(matrix), rowPins, colPins, 4, 4);
+
+string passkey = "1234";
+string current = "";
 
 void setup() 
 {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  // Initialize serial communication
+  Serial.begin(9600);
 }
 
 void loop() 
 {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) 
-{
-  return x + y;
-}
-
-int dummy(int x)
-{
-  return x + x + x;
+  char key = keypad.getKey();
+  if (key)
+  {
+    Serial.println(key);
+  }
 }
