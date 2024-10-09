@@ -10,20 +10,51 @@ byte colPins[4] = {13, 12, 14, 27};
 
 Keypad keypad = Keypad(makeKeymap(matrix), rowPins, colPins, 4, 4);
 
-string passkey = "1234";
+string passkey = "AB12";
 string current = "";
 
-void setup() 
+void setup()
 {
   // Initialize serial communication
   Serial.begin(9600);
 }
 
-void loop() 
+void loop()
 {
   char key = keypad.getKey();
+
   if (key)
   {
-    Serial.println(key);
+    if (current.size() > passkey.size())
+    {
+      Serial.println("Passkey too long");
+      // Make LED turn red
+      delay(2000);
+      current = "";
+    }
+
+    if (key != '*' && current.size() < passkey.size())
+    {
+      Serial.println(key); // optional for testing
+      current += key;
+    }
+    else if (key == '*' && !current.empty())
+    {
+      if (current == passkey)
+      {
+        Serial.println("Correct passkey");
+        // Make LED turn green
+        delay(2000);
+        // Send signal to unlock
+        current = "";
+      }
+      else
+      {
+        Serial.println("Wrong passkey");
+        // Make LED turn red
+        delay(2000);
+        current = "";
+      }
+    }
   }
 }
